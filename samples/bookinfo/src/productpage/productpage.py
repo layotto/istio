@@ -70,6 +70,13 @@ details = {
     "children": []
 }
 
+# Layotto Detail
+layottoDetails = {
+    "name": "http://{0}{1}:8080".format(detailsHostname, servicesDomain),
+    "endpoint": "example",
+    "children": []
+}
+
 ratings = {
     "name": "http://{0}{1}:9080".format(ratingsHostname, servicesDomain),
     "endpoint": "ratings",
@@ -303,6 +310,10 @@ def front():
     product = getProduct(product_id)
     detailsStatus, details = getProductDetails(product_id, headers)
 
+    # TODO 添加img、state接口
+    layottoState, detailsState = getLayottoState(product_id, headers)
+    layottoImg, detailsImg = getLayottoImg(product_id, headers)
+
     if flood_factor > 0:
         floodReviews(product_id, headers)
 
@@ -314,6 +325,10 @@ def front():
         product=product,
         details=details,
         reviews=reviews,
+        stateMsg=detailsState,
+        layottostate=layottoState,
+        layottoImg=layottoImg,
+        imgMsg=detailsImg,
         user=user)
 
 
@@ -378,6 +393,31 @@ def getProductDetails(product_id, headers):
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, product details are currently unavailable for this book.'}
 
+# Layotto get img
+def getLayottoImg(product_id, headers):
+    try:
+        url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "img" + "/" +str(product_id)
+        res = requests.get(url, headers=headers, timeout=3.0)
+    except BaseException:
+        res = None
+    if res and res.status_code == 200:
+        return 200, res.json()
+    else:
+        status = res.status_code if res is not None and res.status_code else 500
+        return status, {'error': 'Sorry, layotto get img fail.'}
+
+# Layotto get state
+def getLayottoState(product_id, headers):
+    try:
+        url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "state" + "/" + str(product_id)
+        res = requests.get(url, headers=headers, timeout=3.0)
+    except BaseException:
+        res = None
+    if res and res.status_code == 200:
+        return 200, res.json()
+    else:
+        status = res.status_code if res is not None and res.status_code else 500
+        return status, {'error': 'Sorry, layotto get state fail.'}
 
 def getProductReviews(product_id, headers):
     # Do not remove. Bug introduced explicitly for illustration in fault injection task
