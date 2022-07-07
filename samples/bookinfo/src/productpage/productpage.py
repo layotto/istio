@@ -401,7 +401,8 @@ def getLayottoImg(product_id, headers):
     except BaseException:
         res = None
     if res and res.status_code == 200:
-        return 200, res.json()
+        data = res.json()
+        return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, layotto get img fail.'}
@@ -414,7 +415,8 @@ def getLayottoState(product_id, headers):
     except BaseException:
         res = None
     if res and res.status_code == 200:
-        return 200, res.json()
+        data = res.json()
+        return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, layotto get state fail.'}
