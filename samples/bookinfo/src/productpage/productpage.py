@@ -314,7 +314,7 @@ def front():
     # TODO 添加img、state接口
     layottoState, detailsState = getLayottoState(product_id, headers)
     layottoImg, detailsImg = getLayottoImg(product_id, headers)
-    htmlImg = base64.b64decode(detailsImg)
+    htmlImg = str(base64.b64decode(detailsImg), encoding='utf-8')
 
     if flood_factor > 0:
         floodReviews(product_id, headers)
