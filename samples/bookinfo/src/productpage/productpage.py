@@ -33,6 +33,7 @@ import logging
 import requests
 import os
 import asyncio
+import base64
 
 # These two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -313,6 +314,7 @@ def front():
     # TODO 添加img、state接口
     layottoState, detailsState = getLayottoState(product_id, headers)
     layottoImg, detailsImg = getLayottoImg(product_id, headers)
+    htmlImg = base64.b64decode(detailsImg)
 
     if flood_factor > 0:
         floodReviews(product_id, headers)
@@ -327,7 +329,7 @@ def front():
         reviews=reviews,
         stateMsg=detailsState,
         layottostate=layottoState,
-        layottoImg=layottoImg,
+        layottoImg=htmlImg,
         imgMsg=detailsImg,
         user=user)
 
