@@ -24,6 +24,13 @@
     $('#username').focus();
   });
 </script>
+<style>
+    .img {
+        position:relative;
+        top: -180px;
+        left: 550px;
+    }
+</style>
 {% endblock %}
 {% block title %}Simple Bookstore App{% endblock %}
 {% block content %}
@@ -107,7 +114,7 @@
       {% if detailsStatus == 200: %}
       <h4 class="text-center text-primary">Book Details</h4>
       <dl>
-        <dt>Type:</dt>{{ details.type }
+        <dt>Type:</dt>{{ details.type }}
         <dt>Pages:</dt>{{ details.pages }}
         <dt>Publisher:</dt>{{ details.publisher }}
         <dt>Language:</dt>{{ details.language }}
@@ -122,13 +129,14 @@
       <p>{{ details.error }}</p>
       {% endif %}
       {% endif %}
-    </div>
-
-    {# show layotto img #}
-    <div class="col-md-6">
-        {% if layottoImg == 200: %}
-            <img src="data:;base64,{{ layottoImg }}" height="50px" width="50px">
-        {% endif %}
+      {# show layotto img #}
+        <div class="img">
+            {% if detailsStatus == 200: %}
+            {% if layottoImg == 200: %}
+                <img src="data:;base64,{{ imgMsg }}" height="180px" width="180px">
+            {% endif %}
+            {% endif %}
+        </div>
     </div>
 
     <div class="col-md-6">

@@ -73,7 +73,7 @@ details = {
 
 # Layotto Detail
 layottoDetails = {
-    "name": "http://{0}{1}:8080".format(detailsHostname, servicesDomain),
+    "name": "http://127.0.0.1:8080",
     "endpoint": "example",
     "children": []
 }
@@ -249,16 +249,16 @@ def getForwardHeaders(request):
 
 
 # The UI:
-@app.route('/')
-@app.route('/index.html')
-def index():
-    """ Display productpage with normal user and test user buttons"""
-    global productpage
-
-    table = json2html.convert(json=json.dumps(productpage),
-                              table_attributes="class=\"table table-condensed table-bordered table-hover\"")
-
-    return render_template('index.html', serviceTable=table)
+# @app.route('/')
+# @app.route('/index.html')
+# def index():
+#     """ Display productpage with normal user and test user buttons"""
+#     global productpage
+#
+#     table = json2html.convert(json=json.dumps(productpage),
+#                               table_attributes="class=\"table table-condensed table-bordered table-hover\"")
+#
+#     return render_template('index.html', serviceTable=table)
 
 
 @app.route('/health')
@@ -266,12 +266,12 @@ def health():
     return 'Product page is healthy'
 
 
-@app.route('/login', methods=['POST'])
-def login():
-    user = request.values.get('username')
-    response = app.make_response(redirect(request.referrer))
-    session['user'] = user
-    return response
+# @app.route('/login', methods=['POST'])
+# def login():
+#     user = request.values.get('username')
+#     response = app.make_response(redirect(request.referrer))
+#     session['user'] = user
+#     return response
 
 
 @app.route('/logout', methods=['GET'])
@@ -314,7 +314,6 @@ def front():
     # TODO 添加img、state接口
     layottoState, detailsState = getLayottoState(product_id, headers)
     layottoImg, detailsImg = getLayottoImg(product_id, headers)
-    htmlImg = str(base64.b64decode(detailsImg), encoding='utf-8')
 
     if flood_factor > 0:
         floodReviews(product_id, headers)
@@ -329,7 +328,7 @@ def front():
         reviews=reviews,
         stateMsg=detailsState,
         layottostate=layottoState,
-        layottoImg=htmlImg,
+        layottoImg=layottoImg,
         imgMsg=detailsImg,
         user=user)
 
@@ -404,6 +403,7 @@ def getLayottoImg(product_id, headers):
         res = None
     if res and res.status_code == 200:
         data = res.json()
+        # print(data["data"])
         return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
@@ -413,6 +413,8 @@ def getLayottoImg(product_id, headers):
 def getLayottoState(product_id, headers):
     try:
         url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "state" + "/" + str(product_id)
+        print("=========state============")
+        print(url)
         res = requests.get(url, headers=headers, timeout=3.0)
     except BaseException:
         res = None
@@ -471,4 +473,4 @@ if __name__ == '__main__':
     logging.info("start at port %s" % (p))
     # Python does not work on an IPv6 only host
     # https://bugs.python.org/issue10414
-    app.run(host='0.0.0.0', port=p, debug=True, threaded=True)
+    app.run(host='127.0.0.1', port=p, debug=True, threaded=True)
