@@ -403,7 +403,6 @@ def getLayottoImg(product_id, headers):
         res = None
     if res and res.status_code == 200:
         data = res.json()
-        # print(data["data"])
         return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
@@ -413,8 +412,6 @@ def getLayottoImg(product_id, headers):
 def getLayottoState(product_id, headers):
     try:
         url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "state" + "/" + str(product_id)
-        print("=========state============")
-        print(url)
         res = requests.get(url, headers=headers, timeout=3.0)
     except BaseException:
         res = None
