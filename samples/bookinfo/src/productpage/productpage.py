@@ -249,16 +249,16 @@ def getForwardHeaders(request):
 
 
 # The UI:
-# @app.route('/')
-# @app.route('/index.html')
-# def index():
-#     """ Display productpage with normal user and test user buttons"""
-#     global productpage
-#
-#     table = json2html.convert(json=json.dumps(productpage),
-#                               table_attributes="class=\"table table-condensed table-bordered table-hover\"")
-#
-#     return render_template('index.html', serviceTable=table)
+@app.route('/')
+@app.route('/index.html')
+def index():
+    """ Display productpage with normal user and test user buttons"""
+    global productpage
+
+    table = json2html.convert(json=json.dumps(productpage),
+                              table_attributes="class=\"table table-condensed table-bordered table-hover\"")
+
+    return render_template('index.html', serviceTable=table)
 
 
 @app.route('/health')
@@ -266,12 +266,12 @@ def health():
     return 'Product page is healthy'
 
 
-# @app.route('/login', methods=['POST'])
-# def login():
-#     user = request.values.get('username')
-#     response = app.make_response(redirect(request.referrer))
-#     session['user'] = user
-#     return response
+@app.route('/login', methods=['POST'])
+def login():
+    user = request.values.get('username')
+    response = app.make_response(redirect(request.referrer))
+    session['user'] = user
+    return response
 
 
 @app.route('/logout', methods=['GET'])
