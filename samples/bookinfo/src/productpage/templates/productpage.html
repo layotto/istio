@@ -109,6 +109,8 @@
     </div>
   </div>
 
+<div style="margin-left: 170px">
+
   <div class="row">
     <div class="col-md-6">
       {% if detailsStatus == 200: %}
@@ -129,17 +131,20 @@
       <p>{{ details.error }}</p>
       {% endif %}
       {% endif %}
-      {# show layotto img #}
-        <div class="img">
+
+        {# show layotto img #}
+       </div>
+        <div class="col-md-6">
             {% if detailsStatus == 200: %}
             {% if layottoImg == 200: %}
-                <img src="data:;base64,{{ imgMsg }}" height="180px" width="180px">
+                <img src="data:;base64,{{ imgMsg }}" height="250px" width="250px" style="margin-top: 40px">
             {% endif %}
             {% endif %}
         </div>
-    </div>
 
-    <div class="col-md-6">
+
+  </div>
+  <div class="col-md-6" style="padding-top: 30px;">
       {% if reviewsStatus == 200: %}
       <h4 class="text-center text-primary">Book Reviews</h4>
       {% for review in reviews.reviews %}
@@ -171,6 +176,6 @@
       {% endif %}
       {% endif %}
     </div>
-  </div>
+</div>
 </div>
 {% endblock %}
