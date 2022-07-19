@@ -30,6 +30,22 @@
         top: -180px;
         left: 550px;
     }
+
+    .feed {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation: move .6s infinite alternate;
+        @keyframes move{
+            from{
+                  transform: translateX(1000px);
+            }
+            to{
+               transform: translateX(0px);
+            }
+        }
+    }
 </style>
 {% endblock %}
 {% block title %}Simple Bookstore App{% endblock %}
@@ -122,8 +138,6 @@
         <dt>Language:</dt>{{ details.language }}
         <dt>ISBN-10:</dt>{{ details['ISBN-10'] }}
         <dt>ISBN-13:</dt>{{ details['ISBN-13'] }}
-        {# show layotto state #}
-        <dt>news feed:</dt>{{ newsMsg }}
       </dl>
       {% else %}
       <h4 class="text-center text-primary">Error fetching product details!</h4>
@@ -176,5 +190,17 @@
       {% endif %}
     </div>
 </div>
+
+</div>
+
+<div class="feed">
+    {# show layotto state #}
+    <marquee>
+         {% if newsStatus == 200: %}
+        <span style="font-weight: bolder;font-size: 40px;color: black;">
+            {{ newsMsg }}
+        </span>
+        {% endif %}
+    </marquee>
 </div>
 {% endblock %}
