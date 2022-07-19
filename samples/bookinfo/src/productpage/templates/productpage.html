@@ -24,6 +24,29 @@
     $('#username').focus();
   });
 </script>
+<style>
+    .img {
+        position:relative;
+        top: -180px;
+        left: 550px;
+    }
+
+    .feed {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        animation: move .6s infinite alternate;
+        @keyframes move{
+            from{
+                  transform: translateX(1000px);
+            }
+            to{
+               transform: translateX(0px);
+            }
+        }
+    }
+</style>
 {% endblock %}
 {% block title %}Simple Bookstore App{% endblock %}
 {% block content %}
@@ -102,6 +125,8 @@
     </div>
   </div>
 
+<div style="margin-left: 170px">
+
   <div class="row">
     <div class="col-md-6">
       {% if detailsStatus == 200: %}
@@ -120,9 +145,19 @@
       <p>{{ details.error }}</p>
       {% endif %}
       {% endif %}
-    </div>
 
-    <div class="col-md-6">
+        {# show layotto img #}
+       </div>
+        <div class="col-md-6">
+            {% if detailsStatus == 200: %}
+            {% if imgStatus == 200: %}
+                <img src="data:;base64,{{ imgMsg }}" height="250px" width="250px" style="margin-top: 40px">
+            {% endif %}
+            {% endif %}
+        </div>
+
+  </div>
+  <div class="col-md-6" style="padding-top: 30px;">
       {% if reviewsStatus == 200: %}
       <h4 class="text-center text-primary">Book Reviews</h4>
       {% for review in reviews.reviews %}
@@ -154,6 +189,18 @@
       {% endif %}
       {% endif %}
     </div>
-  </div>
+</div>
+
+</div>
+
+<div class="feed">
+    {# show layotto state #}
+    <marquee>
+         {% if newsStatus == 200: %}
+        <span style="font-weight: bolder;font-size: 40px;color: black;">
+            {{ newsMsg }}
+        </span>
+        {% endif %}
+    </marquee>
 </div>
 {% endblock %}

@@ -33,6 +33,7 @@ import logging
 import requests
 import os
 import asyncio
+import base64
 
 # These two lines enable debugging at httplib level (requests->urllib3->http.client)
 # You will see the REQUEST, including HEADERS and DATA, and RESPONSE with HEADERS but without DATA.
@@ -61,12 +62,20 @@ servicesDomain = "" if (os.environ.get("SERVICES_DOMAIN") is None) else "." + os
 detailsHostname = "details" if (os.environ.get("DETAILS_HOSTNAME") is None) else os.environ.get("DETAILS_HOSTNAME")
 ratingsHostname = "ratings" if (os.environ.get("RATINGS_HOSTNAME") is None) else os.environ.get("RATINGS_HOSTNAME")
 reviewsHostname = "reviews" if (os.environ.get("REVIEWS_HOSTNAME") is None) else os.environ.get("REVIEWS_HOSTNAME")
+previewsHostname = "previews" if (os.environ.get("PREVIEWS_HOSTNAME") is None) else os.environ.get("PREVIEWS_HOSTNAME")
 
 flood_factor = 0 if (os.environ.get("FLOOD_FACTOR") is None) else int(os.environ.get("FLOOD_FACTOR"))
 
 details = {
     "name": "http://{0}{1}:9080".format(detailsHostname, servicesDomain),
     "endpoint": "details",
+    "children": []
+}
+
+# previews server
+previews = {
+    "name": "http://{0}{1}:9080".format(previewsHostname, servicesDomain),
+    "endpoint": "example",
     "children": []
 }
 
@@ -303,6 +312,9 @@ def front():
     product = getProduct(product_id)
     detailsStatus, details = getProductDetails(product_id, headers)
 
+    newsStatus, newsFeed = getNewsFeed(product_id, headers)
+    imgStatus, img = getPreviewImg(product_id, headers)
+
     if flood_factor > 0:
         floodReviews(product_id, headers)
 
@@ -314,6 +326,10 @@ def front():
         product=product,
         details=details,
         reviews=reviews,
+        newsMsg=newsFeed,
+        newsStatus=newsStatus,
+        imgStatus=imgStatus,
+        imgMsg=img,
         user=user)
 
 
@@ -378,6 +394,33 @@ def getProductDetails(product_id, headers):
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, product details are currently unavailable for this book.'}
 
+# Preview get img
+def getPreviewImg(product_id, headers):
+    try:
+        url = previews['name'] + "/" + previews['endpoint'] + "/" + "img" + "/" +str(product_id)
+        res = requests.get(url, headers=headers, timeout=3.0)
+    except BaseException:
+        res = None
+    if res and res.status_code == 200:
+        data = res.json()
+        return 200, data["data"]
+    else:
+        status = res.status_code if res is not None and res.status_code else 500
+        return status, {'error': 'Sorry, Preview server get img fail.'}
+
+# Preview get state
+def getNewsFeed(product_id, headers):
+    try:
+        url = previews['name'] + "/" + previews['endpoint'] + "/" + "state" + "/" + str(product_id)
+        res = requests.get(url, headers=headers, timeout=3.0)
+    except BaseException:
+        res = None
+    if res and res.status_code == 200:
+        data = res.json()
+        return 200, data["data"]
+    else:
+        status = res.status_code if res is not None and res.status_code else 500
+        return status, {'error': 'Sorry, Preview server get state fail.'}
 
 def getProductReviews(product_id, headers):
     # Do not remove. Bug introduced explicitly for illustration in fault injection task
