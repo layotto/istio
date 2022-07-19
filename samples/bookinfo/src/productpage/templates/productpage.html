@@ -123,7 +123,7 @@
         <dt>ISBN-10:</dt>{{ details['ISBN-10'] }}
         <dt>ISBN-13:</dt>{{ details['ISBN-13'] }}
         {# show layotto state #}
-        <dt>news feed:</dt>{{ stateMsg }}
+        <dt>news feed:</dt>{{ newsMsg }}
       </dl>
       {% else %}
       <h4 class="text-center text-primary">Error fetching product details!</h4>
@@ -136,12 +136,11 @@
        </div>
         <div class="col-md-6">
             {% if detailsStatus == 200: %}
-            {% if layottoImg == 200: %}
+            {% if imgStatus == 200: %}
                 <img src="data:;base64,{{ imgMsg }}" height="250px" width="250px" style="margin-top: 40px">
             {% endif %}
             {% endif %}
         </div>
-
 
   </div>
   <div class="col-md-6" style="padding-top: 30px;">

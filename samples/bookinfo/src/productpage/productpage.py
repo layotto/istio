@@ -62,6 +62,7 @@ servicesDomain = "" if (os.environ.get("SERVICES_DOMAIN") is None) else "." + os
 detailsHostname = "details" if (os.environ.get("DETAILS_HOSTNAME") is None) else os.environ.get("DETAILS_HOSTNAME")
 ratingsHostname = "ratings" if (os.environ.get("RATINGS_HOSTNAME") is None) else os.environ.get("RATINGS_HOSTNAME")
 reviewsHostname = "reviews" if (os.environ.get("REVIEWS_HOSTNAME") is None) else os.environ.get("REVIEWS_HOSTNAME")
+previewsHostname = "previews" if (os.environ.get("PREVIEWS_HOSTNAME") is None) else os.environ.get("PREVIEWS_HOSTNAME")
 
 flood_factor = 0 if (os.environ.get("FLOOD_FACTOR") is None) else int(os.environ.get("FLOOD_FACTOR"))
 
@@ -71,9 +72,9 @@ details = {
     "children": []
 }
 
-# Layotto Detail
-layottoDetails = {
-    "name": "http://127.0.0.1:8080",
+# previews server
+previews = {
+    "name": "http://{0}{1}:9080".format(previewsHostname, servicesDomain),
     "endpoint": "example",
     "children": []
 }
@@ -311,9 +312,8 @@ def front():
     product = getProduct(product_id)
     detailsStatus, details = getProductDetails(product_id, headers)
 
-    # TODO 添加img、state接口
-    layottoState, detailsState = getLayottoState(product_id, headers)
-    layottoImg, detailsImg = getLayottoImg(product_id, headers)
+    newsStatus, newsFeed = getNewsFeed(product_id, headers)
+    imgStatus, img = getPreviewImg(product_id, headers)
 
     if flood_factor > 0:
         floodReviews(product_id, headers)
@@ -326,10 +326,10 @@ def front():
         product=product,
         details=details,
         reviews=reviews,
-        stateMsg=detailsState,
-        layottostate=layottoState,
-        layottoImg=layottoImg,
-        imgMsg=detailsImg,
+        newsMsg=newsFeed,
+        newsStatus=newsStatus,
+        imgStatus=imgStatus,
+        imgMsg=img,
         user=user)
 
 
@@ -394,10 +394,10 @@ def getProductDetails(product_id, headers):
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, product details are currently unavailable for this book.'}
 
-# Layotto get img
-def getLayottoImg(product_id, headers):
+# Preview get img
+def getPreviewImg(product_id, headers):
     try:
-        url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "img" + "/" +str(product_id)
+        url = previews['name'] + "/" + previews['endpoint'] + "/" + "img" + "/" +str(product_id)
         res = requests.get(url, headers=headers, timeout=3.0)
     except BaseException:
         res = None
@@ -408,10 +408,10 @@ def getLayottoImg(product_id, headers):
         status = res.status_code if res is not None and res.status_code else 500
         return status, {'error': 'Sorry, layotto get img fail.'}
 
-# Layotto get state
-def getLayottoState(product_id, headers):
+# Preview get state
+def getNewsFeed(product_id, headers):
     try:
-        url = layottoDetails['name'] + "/" + layottoDetails['endpoint'] + "/" + "state" + "/" + str(product_id)
+        url = previews['name'] + "/" + previews['endpoint'] + "/" + "state" + "/" + str(product_id)
         res = requests.get(url, headers=headers, timeout=3.0)
     except BaseException:
         res = None
