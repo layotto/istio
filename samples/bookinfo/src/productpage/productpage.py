@@ -406,7 +406,7 @@ def getPreviewImg(product_id, headers):
         return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
-        return status, {'error': 'Sorry, layotto get img fail.'}
+        return status, {'error': 'Sorry, Preview server get img fail.'}
 
 # Preview get state
 def getNewsFeed(product_id, headers):
@@ -420,7 +420,7 @@ def getNewsFeed(product_id, headers):
         return 200, data["data"]
     else:
         status = res.status_code if res is not None and res.status_code else 500
-        return status, {'error': 'Sorry, layotto get state fail.'}
+        return status, {'error': 'Sorry, Preview server get state fail.'}
 
 def getProductReviews(product_id, headers):
     # Do not remove. Bug introduced explicitly for illustration in fault injection task
