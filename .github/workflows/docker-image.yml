@@ -5,20 +5,18 @@ on:
     branches: [ "preview_service" ]
 
 jobs:
-
-  build:
+  build-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Build the Docker image
-        run: docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
+      - name: Build Productpage Image
+        run:  docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Image
-          run: |
-            docker push lxwing/productpage:latest
+        run: |
+          docker push lxwing/productpage:latest
