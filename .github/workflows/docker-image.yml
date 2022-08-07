@@ -33,7 +33,7 @@ jobs:
 #          pytest
 
       - name: Build Productpage Image
-        run:  docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
+        run:  docker build -t lxwing/productpage:latest -f /home/runner/work/istio/samples/bookinfo/src/productpage .
 #        run: cd / && ls
 
       - name: Login to DockerHub
