@@ -34,7 +34,7 @@ jobs:
 
       - name: Build Productpage Image
 #        run:  docker build -t lxwing/productpage:latest -f /home/runner/work/istio/samples/bookinfo/src/productpage .
-        run: cd /home/runner/work/istio && ls
+        run: cd /home/runner/work/istio/istio && ls
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
