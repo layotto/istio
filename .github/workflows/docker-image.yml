@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Build Productpage Image
 #        run:  docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
-        run: ls samples/bookinfo
+        run: cd istio/samples/bookinfo && ls
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
