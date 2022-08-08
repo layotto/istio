@@ -3,8 +3,8 @@ name: Docker Image CI
 on:
   push:
     branches: [ "preview_service" ]
-         paths:
-           - 'samples/bookinfo/src/productpage/**'
+    paths:
+      - 'samples/bookinfo/src/productpage/**'
 
 jobs:
   build-image:
