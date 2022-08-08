@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build Productpage Image
-        run:  cd samples/bookinfo/src/productpage && docker build -t lxwing/productpage:latest -f Dockerfile .
+        run:  cd samples/bookinfo/src/productpage && docker build -t layotto/productpage:latest -f Dockerfile .
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -22,4 +22,4 @@ jobs:
 
       - name: Push Image
         run: |
-          docker push lxwing/productpage:latest
+          docker push layotto/productpage:latest
