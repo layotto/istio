@@ -8,6 +8,9 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Build Productpage Image
         run:  ls && pwd && docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
 #        run: cd /home/runner/work/istio/istio && ls
