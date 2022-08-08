@@ -8,9 +8,8 @@ jobs:
   build-image:
     runs-on: ubuntu-latest
     steps:
-
       - name: Build Productpage Image
-        run:  ls && docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
+        run:  ls && pwd && docker build -t lxwing/productpage:latest -f samples/bookinfo/src/productpage .
 #        run: cd /home/runner/work/istio/istio && ls
 
       - name: Login to DockerHub
