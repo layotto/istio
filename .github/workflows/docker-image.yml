@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "preview_service" ]
+    paths:
+      - 'samples/bookinfo/src/productpage/**'
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Productpage Image
+        run:  cd samples/bookinfo/src/productpage && docker build -t layotto/productpage:latest -f Dockerfile .
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Image
+        run: |
+          docker push layotto/productpage:latest
